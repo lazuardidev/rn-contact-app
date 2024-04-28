@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  // TextInput,
   StyleSheet,
   Alert,
   Modal,
@@ -12,15 +11,10 @@ import {
 } from 'react-native';
 import {Avatar, Button, TextInput} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {TContact, TContactPayload} from '../utils/type';
-import {
-  createContact,
-  deleteContact,
-  editContact,
-  getContactById,
-} from '../utils/api';
+import {TContactPayload} from '../utils/type';
+import {deleteContact, editContact, getContactById} from '../utils/api';
 
-const Detail = ({navigation, route}) => {
+const Detail = ({navigation, route}: {navigation: any; route: any}) => {
   const {id, onEditComplete} = route.params;
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<TContactPayload>({
@@ -29,16 +23,14 @@ const Detail = ({navigation, route}) => {
     lastName: '',
     photo: '',
   });
-  const [prevImage, setPrevImage] = useState();
+  const [prevImage, setPrevImage] = useState<any>();
   const [modalVisible, setModalVisible] = useState(false);
-  console.log(route.params, ' route.params');
 
   useEffect(() => {
     const fetchContactDetail = async () => {
       try {
         const response = await getContactById({id: id});
         const data = response.data.data;
-        console.log(response.data.data, ' responsedetailsss----=====');
         setFormData({
           age: data.age,
           firstName: data.firstName,
@@ -62,7 +54,6 @@ const Detail = ({navigation, route}) => {
       setFormData({...formData, photo: fileName});
       setPrevImage(image);
       setModalVisible(false);
-      console.log(image, ' res?.assets');
     }
   };
 
@@ -92,6 +83,9 @@ const Detail = ({navigation, route}) => {
     const {photo, firstName, lastName, age} = formData;
     if (!firstName || !lastName || !age) {
       let errorMessage = 'The following fields are required:\n';
+      if (!photo) {
+        errorMessage += '- Photo\n';
+      }
       if (!firstName) {
         errorMessage += '- First Name\n';
       }
@@ -104,8 +98,6 @@ const Detail = ({navigation, route}) => {
       Alert.alert('Fields Required', errorMessage);
       return;
     }
-    // Handle form submission
-    console.log('Form submitted:', JSON.stringify(formData));
 
     setLoading(true);
     editContact({
@@ -113,8 +105,6 @@ const Detail = ({navigation, route}) => {
       payload: formData,
     })
       .then(res => {
-        console.log(res);
-        // navigation.goBack();
         Alert.alert(
           'Success',
           'Your contact edited successfully',
@@ -132,7 +122,6 @@ const Detail = ({navigation, route}) => {
       })
       .catch(e => {
         Alert.alert('Error', e.message);
-        console.log(JSON.stringify(e, null, 2));
       })
       .finally(() => {
         setLoading(false);
@@ -148,7 +137,6 @@ const Detail = ({navigation, route}) => {
       })
       .catch(e => {
         Alert.alert('Error', e.message);
-        console.log(JSON.stringify(e, null, 2));
       })
       .finally(() => {
         setLoading(false);
@@ -294,7 +282,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   formContainer: {
-    marginBottom: 20, // Add margin bottom to create space between components
+    marginBottom: 20,
     width: '100%',
   },
   input: {

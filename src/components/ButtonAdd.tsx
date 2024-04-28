@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ButtonAdd = ({onPress}) => {
+const ButtonAdd = ({onPress}: {onPress: () => void}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     right: 20,
   },
   button: {
-    backgroundColor: 'purple', // Set your button color
+    backgroundColor: 'purple',
     width: 60,
     height: 60,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3, // for Android shadow
-    shadowColor: 'black', // for iOS shadow
+    elevation: 3,
+    shadowColor: 'black',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 2,

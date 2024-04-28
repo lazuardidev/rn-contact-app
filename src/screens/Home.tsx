@@ -19,7 +19,7 @@ import {addContacts, toggleFavorite} from '../hooks/actions/favorite';
 import {SCREENS} from '../utils/constants';
 import ButtonAdd from '../components/ButtonAdd';
 
-const Home = ({navigation}) => {
+const Home = ({navigation}: {navigation: any}) => {
   const [sections, setSections] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -30,11 +30,10 @@ const Home = ({navigation}) => {
     try {
       setRefreshing(true);
       setLoading(true);
-      const response = await getContacts(); // Fetch contacts using getContacts function
-      // setContacts(data);
+      const response = await getContacts();
       const data: TContact[] = response.data.data.map((contact: TContact) => ({
         ...contact,
-        isFavorite: contact.isFavorite ?? false, // Set default value if isFavorite is undefined
+        isFavorite: contact.isFavorite ?? false,
       }));
       dispatch(addContacts(data));
 
@@ -67,6 +66,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     fetchContacts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddToFavorites = (contact: TContact) => {
@@ -86,7 +86,6 @@ const Home = ({navigation}) => {
       })),
     );
 
-    console.log(foundContact, ' foundContact=====');
     ToastAndroid.showWithGravityAndOffset(
       !contact.isFavorite
         ? 'Data added to favorite'
@@ -146,13 +145,10 @@ const Home = ({navigation}) => {
                     <View key={item.id} style={styles.cardWrapper}>
                       <TouchableOpacity
                         onPress={() => {
-                          // handle onPress
-                          // handleAddToFavorites(item);
                           navigation.navigate(SCREENS.DETAIL, {
                             id: item.id,
                             onEditComplete: onRefetch,
                           });
-                          console.log('pressed==========');
                         }}>
                         <View style={styles.card}>
                           {isValidUrl(item.photo) ? (
@@ -179,8 +175,7 @@ const Home = ({navigation}) => {
                           <TouchableOpacity
                             style={styles.cardAction}
                             onPress={() => {
-                              console.log('handleAddToFavorites', item.id);
-                              handleAddToFavorites(item, letter);
+                              handleAddToFavorites(item);
                             }}>
                             {item.isFavorite ? (
                               <Ionicons

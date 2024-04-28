@@ -1,11 +1,16 @@
-const initialState = {
+import {TContact} from '../../utils/type';
+
+type State = {
+  contacts: TContact[];
+};
+
+const initialState: State = {
   contacts: [],
 };
 
-export const contactsReducer = (state = initialState, action) => {
+export const contactsReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case 'ADD_CONTACTS':
-      // console.log('call ADD_CONTACTS', action.payload);
       return {...state, contacts: action.payload};
     case 'TOGGLE_FAVORITE':
       return {

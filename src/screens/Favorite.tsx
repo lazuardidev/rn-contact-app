@@ -22,9 +22,6 @@ const Favorite = ({navigation}) => {
     state.contacts.contacts.filter(contact => contact.isFavorite),
   );
 
-  console.log(favoriteContacts, ' favoriteContacts2222=====');
-  // console.log(contacts, ' contacts22222=====');
-
   const dispatch = useDispatch();
 
   const handleAddToFavorites = (contact: TContact) => {
@@ -59,12 +56,10 @@ const Favorite = ({navigation}) => {
       .sort((a, b) => a.letter.localeCompare(b.letter));
     setSections(newSections);
     setRefreshing(false);
-    console.log(JSON.stringify(newSections, null, 2), ' newSections');
   };
 
   useEffect(() => {
     refreshData();
-    console.log('mapData========');
   }, []);
 
   const handleRefresh = () => {
@@ -103,7 +98,6 @@ const Favorite = ({navigation}) => {
                     <View key={item.id} style={styles.cardWrapper}>
                       <TouchableOpacity
                         onPress={() => {
-                          // handle onPress
                           handleAddToFavorites(item);
                           navigation.navigate(SCREENS.DETAIL, {
                             id: item.id,
@@ -133,7 +127,6 @@ const Favorite = ({navigation}) => {
                           <TouchableOpacity
                             style={styles.cardAction}
                             onPress={() => {
-                              console.log('handleAddToFavorites', item.id);
                               handleAddToFavorites(item);
                             }}>
                             <Ionicons

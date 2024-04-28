@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   View,
-  //   TextInput,
   StyleSheet,
   Alert,
   Modal,
@@ -10,7 +9,7 @@ import {
 } from 'react-native';
 import {Avatar, Button, TextInput} from 'react-native-paper';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {TContact, TContactPayload} from '../utils/type';
+import {TContactPayload} from '../utils/type';
 import {createContact} from '../utils/api';
 
 const Add = ({navigation, route}) => {
@@ -32,7 +31,6 @@ const Add = ({navigation, route}) => {
       setFormData({...formData, photo: fileName});
       setPrevImage(image);
       setModalVisible(false);
-      console.log(image, ' res?.assets');
     }
   };
 
@@ -78,7 +76,6 @@ const Add = ({navigation, route}) => {
     setLoading(true);
     createContact(formData)
       .then(res => {
-        console.log(res);
         Alert.alert(
           'Success',
           'Your contact added successfully',
@@ -96,13 +93,11 @@ const Add = ({navigation, route}) => {
       })
       .catch(e => {
         Alert.alert('Error', e.message);
-        console.log(e);
       })
       .finally(() => {
         setLoading(false);
       });
 
-    // Reset form fields
     setFormData({
       photo: '',
       firstName: '',
@@ -202,7 +197,6 @@ const Add = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
