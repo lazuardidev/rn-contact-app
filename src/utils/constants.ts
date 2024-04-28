@@ -1,0 +1,7 @@
+export const SCREENS = {
+  HOME: 'HOME',
+  CONTACT: 'CONTACT',
+  FAVORITE: 'FAVORITE',
+  DETAIL: 'DETAIL',
+  ADD: 'ADD',
+};
