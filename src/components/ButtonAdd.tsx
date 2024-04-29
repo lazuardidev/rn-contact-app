@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ButtonAdd = ({onPress}: {onPress: () => void}) => {
+export const ButtonAdd = ({onPress}: {onPress: () => void}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -32,5 +32,3 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
 });
-
-export default ButtonAdd;

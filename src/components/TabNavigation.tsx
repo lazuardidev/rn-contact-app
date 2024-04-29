@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = () => {
+export const TabNavigation = () => {
   const renderTabIcon = (
     route: any,
     focused: boolean,
@@ -43,5 +43,3 @@ const TabNavigation = () => {
     </Tab.Navigator>
   );
 };
-
-export default TabNavigation;

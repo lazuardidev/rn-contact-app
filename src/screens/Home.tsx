@@ -17,9 +17,9 @@ import {TContact} from '../utils/type';
 import {useSelector, useDispatch} from 'react-redux';
 import {addContacts, toggleFavorite} from '../hooks/actions/favorite';
 import {SCREENS} from '../utils/constants';
-import ButtonAdd from '../components/ButtonAdd';
+import {ButtonAdd} from '../components';
 
-const Home = ({navigation}: {navigation: any}) => {
+const Home = ({navigation}: any) => {
   const [sections, setSections] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

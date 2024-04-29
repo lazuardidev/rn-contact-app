@@ -1,18 +1,15 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Alert,
-  Modal,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
-import {Avatar, Button, TextInput} from 'react-native-paper';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {View, StyleSheet, Alert} from 'react-native';
 import {TContactPayload} from '../utils/type';
 import {createContact} from '../utils/api';
+import {
+  Loading,
+  ImagePicker,
+  FormContact,
+  ModalImagePicker,
+} from '../components';
 
-const Add = ({navigation, route}) => {
+const Add = ({navigation, route}: any) => {
   const {onAddComplete} = route.params;
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<TContactPayload>({
@@ -38,28 +35,13 @@ const Add = ({navigation, route}) => {
     setModalVisible(true);
   };
 
-  const handleTakePhoto = () => {
-    launchCamera(
-      {
-        mediaType: 'photo',
-      },
-      callback,
-    );
-  };
-
-  const handleSelectFromLibrary = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      callback,
-    );
-  };
-
-  const handleSubmit = () => {
+  const handleAdd = () => {
     const {photo, firstName, lastName, age} = formData;
     if (!firstName || !lastName || !age) {
       let errorMessage = 'The following fields are required:\n';
+      if (!photo) {
+        errorMessage += '- Photo\n';
+      }
       if (!firstName) {
         errorMessage += '- First Name\n';
       }
@@ -75,7 +57,7 @@ const Add = ({navigation, route}) => {
 
     setLoading(true);
     createContact(formData)
-      .then(res => {
+      .then(_ => {
         Alert.alert(
           'Success',
           'Your contact added successfully',
@@ -107,89 +89,26 @@ const Add = ({navigation, route}) => {
   };
 
   if (loading) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={handleChooseImage}>
-          {prevImage && prevImage.uri ? (
-            <Avatar.Image size={150} source={{uri: prevImage.uri}} />
-          ) : (
-            <Avatar.Icon size={150} icon="camera" />
-          )}
-        </TouchableOpacity>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Button icon="camera" mode="contained" onPress={handleTakePhoto}>
-                Take Photo
-              </Button>
-              <Button
-                icon="folder"
-                mode="contained"
-                style={{
-                  marginVertical: 18,
-                }}
-                onPress={handleSelectFromLibrary}>
-                Choose from Library
-              </Button>
-              <Button
-                mode="contained"
-                buttonColor="red"
-                onPress={() => setModalVisible(false)}>
-                Cancel
-              </Button>
-            </View>
-          </View>
-        </Modal>
-      </View>
-      <View style={styles.formContainer}>
-        <TextInput
-          label="First Name"
-          mode="outlined"
-          style={styles.input}
-          placeholder="First Name"
-          value={formData.firstName}
-          onChangeText={text => setFormData({...formData, firstName: text})}
-        />
-        <TextInput
-          label="Last Name"
-          mode="outlined"
-          style={styles.input}
-          placeholder="Last Name"
-          value={formData.lastName}
-          onChangeText={text => setFormData({...formData, lastName: text})}
-        />
-        <TextInput
-          label="Age"
-          mode="outlined"
-          style={styles.input}
-          placeholder="Age"
-          keyboardType="numeric"
-          value={String(formData.age)}
-          onChangeText={text => setFormData({...formData, age: Number(text)})}
-        />
-      </View>
-      <Button
-        mode="contained"
-        onPress={handleSubmit}
-        style={{
-          width: '100%',
-        }}>
-        Submit
-      </Button>
+      <ImagePicker
+        formData={formData}
+        handleChooseImage={handleChooseImage}
+        prevImage={prevImage}
+      />
+      <FormContact
+        formData={formData}
+        setFormData={setFormData}
+        handleAdd={handleAdd}
+      />
+      <ModalImagePicker
+        isVisible={modalVisible}
+        imageCallback={callback}
+        setIsVisible={setModalVisible}
+      />
     </View>
   );
 };
@@ -199,32 +118,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
-  },
-  imageContainer: {
-    marginBottom: 20,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-    justifyContent: 'space-around',
-  },
-  modalButton: {
-    marginBottom: 10,
-  },
-  formContainer: {
-    marginBottom: 20,
-    width: '100%',
-  },
-  input: {
-    marginBottom: 20,
   },
 });
 
