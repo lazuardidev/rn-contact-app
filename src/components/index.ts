@@ -4,3 +4,6 @@ export * from './ImagePicker';
 export * from './Loading';
 export * from './ModalImagePicker';
 export * from './TabNavigation';
+export * from './Header';
+export * from './NoData';
+export * from './ContactSection';

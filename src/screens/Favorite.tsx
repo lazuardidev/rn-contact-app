@@ -2,20 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
   StyleSheet,
   RefreshControl,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {TContact} from '../utils/type';
 import {toggleFavorite} from '../hooks/actions/favorite';
 import {SCREENS} from '../utils/constants';
+import {NoData, ContactSection, Header} from '../components';
 
-const Favorite = ({navigation}) => {
+const Favorite = ({navigation}: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const [sections, setSections] = useState<any>([]);
   const favoriteContacts = useSelector(state =>
@@ -27,12 +23,6 @@ const Favorite = ({navigation}) => {
   const handleAddToFavorites = (contact: TContact) => {
     dispatch(toggleFavorite(contact.id));
     refreshData();
-  };
-
-  const isValidUrl = (url: string) => {
-    const pattern =
-      /^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.&+=%#?]*)*$/i;
-    return !!pattern.test(url);
   };
 
   const refreshData = () => {
@@ -60,6 +50,7 @@ const Favorite = ({navigation}) => {
 
   useEffect(() => {
     refreshData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRefresh = () => {
@@ -67,82 +58,28 @@ const Favorite = ({navigation}) => {
     refreshData();
   };
 
+  const handleNavigateToDetail = (item: TContact) => {
+    navigation.navigate(SCREENS.DETAIL, {
+      id: item.id,
+      onEditComplete: () => {},
+    });
+  };
+
   return (
-    <SafeAreaView style={{backgroundColor: '#f2f2f2', height: '100%'}}>
+    <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }>
-        <View style={styles.header}>
-          <Text style={styles.title}>Favorites</Text>
-        </View>
-
+        <Header title="Favorites" />
         {sections.length < 1 ? (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: '70%',
-            }}>
-            <Text style={styles.textNoData}>No Data</Text>
-            <Text style={styles.textNoData}>Pull to Refresh</Text>
-          </View>
+          <NoData />
         ) : (
-          sections.map(({letter, items}) => (
-            <View style={styles.section} key={letter}>
-              <Text style={styles.sectionTitle}>{letter}</Text>
-              <View style={styles.sectionItems}>
-                {items.map((item: TContact) => {
-                  return (
-                    <View key={item.id} style={styles.cardWrapper}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleAddToFavorites(item);
-                          navigation.navigate(SCREENS.DETAIL, {
-                            id: item.id,
-                            onEditComplete: () => {},
-                          });
-                        }}>
-                        <View style={styles.card}>
-                          {isValidUrl(item.photo) ? (
-                            <Image
-                              alt=""
-                              resizeMode="cover"
-                              source={{uri: item.photo}}
-                              style={styles.cardImg}
-                            />
-                          ) : (
-                            <View style={[styles.cardImg, styles.cardAvatar]}>
-                              <Text style={styles.cardAvatarText}>
-                                {item.firstName[0]}
-                              </Text>
-                            </View>
-                          )}
-                          <View style={styles.cardBody}>
-                            <Text style={styles.cardTitle}>
-                              {item.firstName + ' ' + item.lastName}
-                            </Text>
-                          </View>
-                          <TouchableOpacity
-                            style={styles.cardAction}
-                            onPress={() => {
-                              handleAddToFavorites(item);
-                            }}>
-                            <Ionicons
-                              color="purple"
-                              name="bookmark"
-                              size={32}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-          ))
+          <ContactSection
+            sections={sections}
+            handleNavigateToDetail={handleNavigateToDetail}
+            handleToogleFavorites={handleAddToFavorites}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -155,78 +92,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 24,
     paddingHorizontal: 0,
-  },
-  header: {
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1d1d1d',
-    marginBottom: 12,
-  },
-  /** Section */
-  section: {
-    marginTop: 12,
-    paddingLeft: 24,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000',
-  },
-  sectionItems: {
-    marginTop: 8,
-  },
-  textNoData: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 16,
-  },
-  /** Card */
-  card: {
-    paddingVertical: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  cardWrapper: {
-    borderBottomWidth: 1,
-    borderColor: '#d6d6d6',
-  },
-  cardImg: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-  },
-  cardAvatar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#9ca1ac',
-  },
-  cardAvatarText: {
-    fontSize: 19,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  cardBody: {
-    marginRight: 'auto',
-    marginLeft: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000',
-  },
-  cardPhone: {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '500',
-    color: '#616d79',
-    marginTop: 3,
-  },
-  cardAction: {
-    paddingRight: 16,
+    backgroundColor: '#f2f2f2',
+    height: '100%',
   },
 });

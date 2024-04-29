@@ -22,3 +22,8 @@ export type TFavorite = {
   photo: string;
   isFavorite: boolean;
 };
+
+export type TContactSectionData = {
+  letter: string;
+  items: TContact[];
+};
