@@ -5,7 +5,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 export const ButtonAdd = ({onPress}: {onPress: () => void}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
+      <TouchableOpacity
+        testID="button-add"
+        style={styles.button}
+        onPress={onPress}>
         <Ionicons name="add" size={24} color="white" />
       </TouchableOpacity>
     </View>

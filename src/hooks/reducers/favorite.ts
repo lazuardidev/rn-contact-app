@@ -1,18 +1,19 @@
 import {TContact} from '../../utils/type';
+import {ADD_CONTACTS, TOGGLE_FAVORITE} from '../actions/favorite';
 
-type State = {
+export type RootState = {
   contacts: TContact[];
 };
 
-const initialState: State = {
+const initialState: RootState = {
   contacts: [],
 };
 
 export const contactsReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case 'ADD_CONTACTS':
+    case ADD_CONTACTS:
       return {...state, contacts: action.payload};
-    case 'TOGGLE_FAVORITE':
+    case TOGGLE_FAVORITE:
       return {
         ...state,
         contacts: state.contacts.map(contact =>

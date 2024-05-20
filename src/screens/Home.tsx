@@ -7,7 +7,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import {getContacts} from '../utils/api';
-import {TContact, TContactSectionData} from '../utils/type';
+import {TContact} from '../utils/type';
 import {useDispatch} from 'react-redux';
 import {addContacts, toggleFavorite} from '../hooks/actions/favorite';
 import {SCREENS} from '../utils/constants';
@@ -20,10 +20,9 @@ import {
 } from '../components';
 
 const Home = ({navigation}: any) => {
-  const [sections, setSections] = useState<TContactSectionData[]>([]);
+  const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  // const {contacts} = useSelector(state => state.contacts);
   const dispatch = useDispatch();
 
   const fetchContacts = async () => {
@@ -71,10 +70,6 @@ const Home = ({navigation}: any) => {
 
   const handleAddToFavorites = (contact: TContact) => {
     dispatch(toggleFavorite(contact.id));
-    // const foundContact = sections.reduce((acc, section) => {
-    //   const foundItem = section.items.find(item => item.id === contact.id);
-    //   return foundItem ? foundItem : acc;
-    // }, null);
     setSections(
       sections.map(section => ({
         ...section,

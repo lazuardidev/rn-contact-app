@@ -14,7 +14,7 @@ import {NoData, ContactSection, Header} from '../components';
 const Favorite = ({navigation}: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const [sections, setSections] = useState<any>([]);
-  const favoriteContacts = useSelector(state =>
+  const favoriteContacts = useSelector((state: any) =>
     state.contacts.contacts.filter(contact => contact.isFavorite),
   );
 

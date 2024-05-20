@@ -26,6 +26,7 @@ export const ContactSection = ({
           return (
             <View key={item.id} style={styles.cardWrapper}>
               <TouchableOpacity
+                testID={`contact-${item.id}`}
                 onPress={() => {
                   handleNavigateToDetail(item);
                 }}>
@@ -50,6 +51,7 @@ export const ContactSection = ({
                     </Text>
                   </View>
                   <TouchableOpacity
+                    testID="favorite-button"
                     style={styles.cardAction}
                     onPress={() => {
                       handleToogleFavorites(item);
@@ -88,7 +90,6 @@ const styles = StyleSheet.create({
     color: '#1d1d1d',
     marginBottom: 12,
   },
-  /** Section */
   section: {
     marginTop: 12,
     paddingLeft: 24,
@@ -106,7 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 16,
   },
-  /** Card */
   card: {
     paddingVertical: 14,
     flexDirection: 'row',
@@ -141,13 +141,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#000',
-  },
-  cardPhone: {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '500',
-    color: '#616d79',
-    marginTop: 3,
   },
   cardAction: {
     paddingRight: 16,
